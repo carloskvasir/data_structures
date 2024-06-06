@@ -1,4 +1,3 @@
-# código que gera todas as possíveis árvores binárias de uma expressão matemática e garante que a travessia pré-ordem (pre-order traversal) retorne a expressão original. Utilizaremos as estruturas de dados da biblioteca padrão do Python
 class Node:
     def __init__(self, data):
         self.data = data
@@ -39,8 +38,20 @@ def generate_all_trees(expr):
     return generate_trees(expr, 0, len(expr) - 1)
 
 def print_all_trees(trees):
-    for tree in trees:
-        print(pre_order(tree))
+    for idx, tree in enumerate(trees):
+        print(f"Tree {idx + 1}:")
+        print(pre_order(tree))  # This prints the expression in prefix notation
+        print_ascii_tree(tree)
+        print()
+
+def print_ascii_tree(node, prefix="", is_left=True):
+    if node is not None:
+        print(prefix + ("|-- " if is_left else "+-- ") + node.data)
+        if node.left or node.right:
+            if node.left:
+                print_ascii_tree(node.left, prefix + ("|   " if node.right else "    "), True)
+            if node.right:
+                print_ascii_tree(node.right, prefix + "    ", False)
 
 def infix_to_postfix(expression):
     precedence = {'+':1, '-':1, '*':2, '/':2}
@@ -64,10 +75,9 @@ def infix_to_postfix(expression):
     return ''.join(output)
 
 if __name__ == '__main__':
-    expr = "((a+(b/c))-d)*e"
+    expr = "(a+(b/c)-d)*e"
     postfix_expr = infix_to_postfix(expr)
     trees = generate_all_trees(postfix_expr)
 
-    print("Pre-order traversals of all possible expression trees:")
+    print("Pre-order traversals of all possible expression trees and their ASCII representations:")
     print_all_trees(trees)
-
