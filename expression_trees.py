@@ -41,17 +41,20 @@ def print_all_trees(trees):
     for idx, tree in enumerate(trees):
         print(f"Tree {idx + 1}:")
         print(pre_order(tree))  # This prints the expression in prefix notation
-        print_ascii_tree(tree)
+        print_tree(tree)
         print()
 
-def print_ascii_tree(node, prefix="", is_left=True):
+def print_tree(node, prefix="", is_left=True, is_root=True):
     if node is not None:
-        print(prefix + ("|-- " if is_left else "+-- ") + node.data)
+        if is_root:
+            print(".")
+        connector = "├l── " if is_left else "└r── "
+        print(prefix + connector + node.data)
         if node.left or node.right:
             if node.left:
-                print_ascii_tree(node.left, prefix + ("|   " if node.right else "    "), True)
+                print_tree(node.left, prefix + ("│   " if node.right else "    "), True, False)
             if node.right:
-                print_ascii_tree(node.right, prefix + "    ", False)
+                print_tree(node.right, prefix + "    ", False, False)
 
 def infix_to_postfix(expression):
     precedence = {'+':1, '-':1, '*':2, '/':2}
