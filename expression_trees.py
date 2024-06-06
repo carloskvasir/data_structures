@@ -37,24 +37,28 @@ def generate_trees(expr, start, end):
 def generate_all_trees(expr):
     return generate_trees(expr, 0, len(expr) - 1)
 
+def edges_from_tree(node):
+    edges = []
+    def traverse(n):
+        if n is not None:
+            if n.left:
+                edges.append(f"{n.data} {n.left.data}")
+                traverse(n.left)
+            if n.right:
+                edges.append(f"{n.data} {n.right.data}")
+                traverse(n.right)
+    traverse(node)
+    return edges
+
 def print_all_trees(trees):
     for idx, tree in enumerate(trees):
         print(f"Tree {idx + 1}:")
         print(pre_order(tree))  # This prints the expression in prefix notation
-        print_tree(tree)
+        edges = edges_from_tree(tree)
+        print("Enter Nodes:")
+        for edge in edges:
+            print(edge)
         print()
-
-def print_tree(node, prefix="", is_left=True, is_root=True):
-    if node is not None:
-        if is_root:
-            print(".")
-        connector = "├l── " if is_left else "└r── "
-        print(prefix + connector + node.data)
-        if node.left or node.right:
-            if node.left:
-                print_tree(node.left, prefix + ("│   " if node.right else "    "), True, False)
-            if node.right:
-                print_tree(node.right, prefix + "    ", False, False)
 
 def infix_to_postfix(expression):
     precedence = {'+':1, '-':1, '*':2, '/':2}
@@ -82,5 +86,5 @@ if __name__ == '__main__':
     postfix_expr = infix_to_postfix(expr)
     trees = generate_all_trees(postfix_expr)
 
-    print("Pre-order traversals of all possible expression trees and their ASCII representations:")
+    print("Pre-order traversals of all possible expression trees and their edge representations:")
     print_all_trees(trees)
