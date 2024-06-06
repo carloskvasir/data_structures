@@ -42,9 +42,31 @@ def print_all_trees(trees):
     for tree in trees:
         print(pre_order(tree))
 
+def infix_to_postfix(expression):
+    precedence = {'+':1, '-':1, '*':2, '/':2}
+    stack = []
+    output = []
+    for char in expression:
+        if char.isalnum():
+            output.append(char)
+        elif char == '(':
+            stack.append(char)
+        elif char == ')':
+            while stack and stack[-1] != '(':
+                output.append(stack.pop())
+            stack.pop()
+        else:
+            while stack and stack[-1] != '(' and precedence[char] <= precedence[stack[-1]]:
+                output.append(stack.pop())
+            stack.append(char)
+    while stack:
+        output.append(stack.pop())
+    return ''.join(output)
+
 if __name__ == '__main__':
-    expr = "a+b*c-d/e"
-    trees = generate_all_trees(expr)
+    expr = "((a+(b/c))-d)*e"
+    postfix_expr = infix_to_postfix(expr)
+    trees = generate_all_trees(postfix_expr)
 
     print("Pre-order traversals of all possible expression trees:")
     print_all_trees(trees)
