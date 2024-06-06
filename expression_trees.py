@@ -94,6 +94,8 @@ def print_graph_edges(edges):
         print(edge)
 
 def display_menu():
+    expr = input("Enter the expression: ")
+
     print("Select the traversal type:")
     print("1. In-Order")
     print("2. Pre-Order")
@@ -106,7 +108,7 @@ def display_menu():
     print("2. Graph edges format")
     display_choice = input("Enter choice (1 or 2): ")
 
-    return traversal_choice, display_choice
+    return expr, traversal_choice, display_choice
 
 def print_all_trees(trees, traversal_choice, display_choice):
     traversal_func = {
@@ -148,11 +150,9 @@ def infix_to_postfix(expression):
     return ''.join(output)
 
 if __name__ == '__main__':
-    expr = "(a+(b/c)-d)*e"
+    expr, traversal_choice, display_choice = display_menu()
     postfix_expr = infix_to_postfix(expr)
     trees = generate_all_trees(postfix_expr)
-
-    traversal_choice, display_choice = display_menu()
 
     print("Traversals of all possible expression trees and their representations:")
     print_all_trees(trees, traversal_choice, display_choice)
